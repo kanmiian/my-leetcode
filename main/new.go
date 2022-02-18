@@ -1,5 +1,11 @@
 package main
 
+import (
+	"fmt"
+	"math"
+	"sort"
+)
+
 type ListNode struct {
 	Val  int
 	Next *ListNode
@@ -15,9 +21,9 @@ func main() {
 	//fmt.Println(maxSubArray(nums))
 
 	// 1984. 学生分数的最小差值
-	nums := []int{90}
-	k := 1
-	minimumDifference(nums, k)
+	//nums := []int{90}
+	//k := 1
+	//minimumDifference(nums, k)
 }
 
 func containsNearbyDuplicate(nums []int, k int) bool {
@@ -53,6 +59,15 @@ func maxSubArray(nums []int) int {
 }
 
 func minimumDifference(nums []int, k int) int {
+	sort.Ints(nums)
 
-	return 1
+	diff := math.MaxInt32
+	fmt.Println(len(nums) - k + 1)
+	for i := range nums[:len(nums)-k+1] {
+		if (nums[i+k-1] - nums[i]) < diff {
+			diff = nums[i+k-1] - nums[i]
+		}
+	}
+
+	return diff
 }
