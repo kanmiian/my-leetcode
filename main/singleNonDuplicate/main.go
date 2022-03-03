@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"sort"
+	"strconv"
 	"unicode"
 )
 
@@ -19,7 +20,6 @@ func main() {
 	//edges := [][]int{{1, 2}, {2, 3}, {4, 2}}
 	//findCenter(edges)
 
-
 	// 917
 	//s := "a-bC-dEf-ghIj"
 	//reverseOnlyLetters(s)
@@ -31,8 +31,12 @@ func main() {
 	//merge(nums1,k,nums2,k)
 
 	// 292
-	n := 1
-	canWinNim(n)
+	//n := 1
+	//canWinNim(n)
+
+	// 258
+	num := 258
+	addDigits(num)
 }
 
 func singleNonDuplicate(nums []int) int {
@@ -106,17 +110,16 @@ func reverseOnlyLetters(s string) string {
 	return string(ans)
 }
 
-
-func merge(nums1 []int, m int, nums2 []int, n int)  {
+func merge(nums1 []int, m int, nums2 []int, n int) {
 
 	length1 := len(nums1)
-	if m + n != length1 {
+	if m+n != length1 {
 
 	}
 
 	// 等于的时候直接排序num1
 	if m < length1 {
-		nums1 = append(nums1[0:m],nums2[0:n]...)
+		nums1 = append(nums1[0:m], nums2[0:n]...)
 	}
 
 	sort.Ints(nums1)
@@ -128,9 +131,32 @@ func canWinNim(n int) bool {
 		return true
 	}
 
-	if n % 4 != 0 {
+	if n%4 != 0 {
 		return true
 	}
 
 	return false
+}
+
+func addDigits(num int) int {
+
+	for {
+		if num <= 9 {
+			break
+		}
+		num = sumNum(num)
+	}
+	return num
+}
+
+func sumNum(num int) int {
+
+	numVar := strconv.Itoa(num)
+	total := 0
+	for i := 0; i < len(numVar); i++ {
+		to, _ := strconv.Atoi(string(numVar[i]))
+		total += to
+	}
+
+	return total
 }
