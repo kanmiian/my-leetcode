@@ -62,8 +62,17 @@ func main() {
 	//isPalindrome(x)
 
 	// 词典中最长的单次
-	words := []string{"a","banana","app","appl","ap","apply","apple"}
-	longestWord(words)
+	//words := []string{"a","banana","app","appl","ap","apply","apple"}
+	//longestWord(words)
+
+	// 交替位二进制
+	//n := 5
+	//hasAlternatingBits(n)
+
+	// 多少个1
+	var n uint32
+	n = 00000000000000000000000000001011
+	hammingWeight(n)
 }
 
 func singleNonDuplicate(nums []int) int {
@@ -352,4 +361,33 @@ func isPalindrome(x int) bool {
 
 	fmt.Println(55555)
 	return true
+}
+
+
+func hasAlternatingBits(n int) bool {
+
+	//now := 0
+	//pre := 2
+	for pre := 2; n != 0; n /= 2 {
+		now := n % 2
+		if now == pre {
+			return false
+		}
+		pre = now
+	}
+
+	return true
+}
+
+func hammingWeight(num uint32) int {
+
+	result := 0
+	for i:=0; i < 32; i++ {
+		if 1<<i&num > 0 {
+			result ++
+		}
+	}
+
+	fmt.Println(result)
+	return result
 }
