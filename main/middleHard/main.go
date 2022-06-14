@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"sort"
 )
 
 func main() {
@@ -12,13 +13,18 @@ func main() {
 
 	// 有效的数独
 	//board := [][]btye
-	board := [][]byte{{'5', '3', '.', '.', '7', '.', '.', '.', '.'},
-		{'6', '.', '.', '1', '9', '5', '.', '.', '.'}, {'.', '9', '8', '.', '.', '.', '.', '6', '.'},
-		{'8', '.', '.', '.', '6', '.', '.', '.', '3'}, {'4', '.', '.', '8', '.', '3', '.', '.', '1'},
-		{'7', '.', '.', '.', '2', '.', '.', '.', '6'}, {'.', '6', '.', '.', '.', '.', '2', '8', '.'},
-		{'.', '.', '.', '4', '1', '9', '.', '.', '5'}, {'.', '.', '.', '.', '8', '.', '.', '7', '9'},
-	}
-	isValidSudoku(board)
+	//board := [][]byte{{'5', '3', '.', '.', '7', '.', '.', '.', '.'},
+	//	{'6', '.', '.', '1', '9', '5', '.', '.', '.'}, {'.', '9', '8', '.', '.', '.', '.', '6', '.'},
+	//	{'8', '.', '.', '.', '6', '.', '.', '.', '3'}, {'4', '.', '.', '8', '.', '3', '.', '.', '1'},
+	//	{'7', '.', '.', '.', '2', '.', '.', '.', '6'}, {'.', '6', '.', '.', '.', '.', '2', '8', '.'},
+	//	{'.', '.', '.', '4', '1', '9', '.', '.', '5'}, {'.', '.', '.', '.', '8', '.', '.', '7', '9'},
+	//}
+	//isValidSudoku(board)
+
+	// 吃香蕉
+	piles := []int{312884470}
+	h := 312884469
+	minEatingSpeed(piles, h)
 }
 
 func maxArea(height []int) int {
@@ -51,7 +57,7 @@ func maxArea(height []int) int {
 
 func isValidSudoku(board [][]byte) bool {
 
-	for i,boa := range board {
+	for i, boa := range board {
 		fmt.Println(i)
 		fmt.Println(boa)
 	}
@@ -59,17 +65,42 @@ func isValidSudoku(board [][]byte) bool {
 	return true
 }
 
+func minEatingSpeed(piles []int, h int) int {
+	arrLen := len(piles)
+	sort.Ints(piles)
+	left := 0
+	right := piles[arrLen-1]
+	// 个数相同，以最大值为结果
+	if arrLen == h {
+		return piles[arrLen-1]
+	}
 
+	for left < right {
+		mid := (right-left)/2 + left
 
+		if getMid(piles, mid) <= h {
+			right = mid
+		} else if getMid(piles, mid) > h {
+			left = mid + 1
+			fmt.Println(left, mid+1)
+		}
 
+	}
 
+	fmt.Println(left)
+	return left
+}
 
-
-
-
-
-
-
+func getMid(piles []int, x int) int {
+	hours := 0
+	for _, pile := range piles {
+		hours += pile / x
+		if pile%x > 0 {
+			hours++
+		}
+	}
+	return hours
+}
 
 /**
 获取较小值

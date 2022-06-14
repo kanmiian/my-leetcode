@@ -70,9 +70,67 @@ func main() {
 	//hasAlternatingBits(n)
 
 	// 多少个1
-	var n uint32
-	n = 00000000000000000000000000001011
-	hammingWeight(n)
+	//var n uint32
+	//n = 00000000000000000000000000001011
+	//hammingWeight(n)
+
+	// 提莫攻击
+	//timeSeries := []int {1,2}
+	//duration := 2
+	//findPoisonedDuration(timeSeries, duration)
+
+	// 校验ip地址
+	//queryIP := "172.16.254.1"
+	//validIPAddress(queryIP)
+
+	// 小镇法官
+	//trust := [][]int{{1, 2}}
+	//n := 2
+	//findJudge(n, trust)
+
+	// 硬币排列
+	//n := 15
+	//arrangeCoins(n)
+
+	// 有效的回旋镖
+	//points := [][]int{{1, 1}, {2, 2}, {3, 3}}
+	//isBoomerang(points)
+
+	// 1051. 高度检查器
+	//heights := []int{1, 1, 4, 2, 1, 3}
+	//heightChecker(heights)
+}
+func heightChecker(heights []int) int {
+
+	sortHeight := make([]int, len(heights))
+	copy(sortHeight, heights)
+	sort.Ints(heights)
+
+	fmt.Println(sortHeight)
+	fmt.Println(heights)
+	count := 0
+	for i, _ := range heights {
+		if heights[i] != sortHeight[i] {
+			count++
+		}
+
+	}
+
+	return count
+}
+
+func isBoomerang(points [][]int) bool {
+
+	// y = kx+b
+	point1 := points[0]
+	point2 := points[1]
+	point3 := points[2]
+	r1 := point1[0] - point2[0]
+	c1 := point1[1] - point2[1]
+	r2 := point2[0] - point3[0]
+	c2 := point2[1] - point3[1]
+
+	return r1*c2 != r2*c1
 }
 
 func singleNonDuplicate(nums []int) int {
@@ -348,7 +406,7 @@ func isPalindrome(x int) bool {
 	str := strconv.Itoa(x)
 	len := len(str)
 	//fmt.Println(len, str)
-	for i, _ := range str {
+	for i := range str {
 		if len-i-1 < 0 {
 			break
 		}
@@ -363,7 +421,7 @@ func isPalindrome(x int) bool {
 	return true
 }
 
-
+// todo
 func hasAlternatingBits(n int) bool {
 
 	//now := 0
@@ -379,15 +437,153 @@ func hasAlternatingBits(n int) bool {
 	return true
 }
 
+// todo
 func hammingWeight(num uint32) int {
 
 	result := 0
-	for i:=0; i < 32; i++ {
+	for i := 0; i < 32; i++ {
 		if 1<<i&num > 0 {
-			result ++
+			result++
 		}
 	}
 
+	fmt.Println(result)
+	return result
+}
+
+// 提莫攻击
+func findPoisonedDuration(timeSeries []int, duration int) int {
+	//我们只需要对数组进行一次扫描就可以计算出总的中毒持续时间。我们记录艾希恢复为未中毒的起始时间
+	//expired，设艾希遭遇第 i 次的攻击的时间为 timeSeries[i]。当艾希遭遇第 i 攻击时：
+	//
+	//如果当前他正处于未中毒状态，则此时他的中毒持续时间应增加
+	//duration，同时更新本次中毒结束时间expired
+	//等于 {timeSeries}[i]+ \textit{duration}timeSeries[i]+duration​；
+	//如果当前他正处于中毒状态，由于中毒状态不可叠加，
+	//我们知道上次中毒后结束时间为 \textit{expired}expired​​，
+	//本次中毒后结束时间为 \textit{timeSeries}[i] + \textit{duration}timeSeries[i]+duration​​，
+	//因此本次中毒增加的持续中毒时间为 \textit{timeSeries}[i] + \textit{duration} -\textit{expired}timeSeries[i]+duration−expired​​；
+	//我们将每次中毒后增加的持续中毒时间相加即为总的持续中毒时间。
+
+	if duration == 0 {
+		return 0
+	}
+
+	time := 0
+	ans := 0
+	for _, t := range timeSeries {
+		if t >= time {
+			ans += duration
+		} else {
+			ans += t + duration - time
+		}
+		time = t + duration
+	}
+
+	fmt.Println(time)
+	return time
+}
+
+// 排列硬币
+func arrangeCoins(n int) int {
+
+	no := 0
+	if n == 1 {
+		return 1
+	}
+	for i := 1; i <= n; i++ {
+		if n-i > 0 {
+			no++
+		}
+		if n-i == i+1 {
+			no++
+			break
+		}
+		// 最后一条不符合长度 结束
+		if n-i < i+1 {
+			break
+		}
+		n -= i
+	}
+
+	fmt.Println(no)
+	return no
+}
+
+// RemoveRepeatedElementAndEmpty 数组去重string
+func removeRepeatElement(list []string) []string {
+	// 创建一个临时map用来存储数组元素
+	temp := make(map[string]bool)
+	index := 0
+	for _, v := range list {
+		// 遍历数组元素，判断此元素是否已经存在map中
+		_, ok := temp[v]
+		if ok {
+			list = append(list[:index], list[index+1:]...)
+		} else {
+			temp[v] = true
+		}
+		index++
+	}
+	return list
+}
+
+// RemoveRepeatedElementAndEmpty 数组去重int
+func uniqueArr(arr []int) []int {
+	newArr := make([]int, 0)
+	tempArr := make(map[int]bool, len(newArr))
+	for _, v := range arr {
+		if tempArr[v] == false {
+			tempArr[v] = true
+			newArr = append(newArr, v)
+		}
+	}
+	return newArr
+}
+
+// todo 验证IP地址  不知道怎么识别ipv6
+func validIPAddress(queryIP string) string {
+	//strArr := strings.Split(queryIP, ".")
+	//IPv4 := "IPv4"
+	//IPv4 := "IPv6"
+	//Neither := "Neither"
+	//if len(strArr) != 4 {
+	//	return Neither
+	//}
+	//
+	//
+
+	return ""
+}
+
+// 小镇法官
+func findJudge(n int, trust [][]int) int {
+	judgeMap := map[int]int{}
+	result := -1
+	if n == 1 {
+		return n
+	}
+	if n == 0 {
+		return result
+	}
+	if len(trust) < 1 {
+		return result
+	}
+	for _, value := range trust {
+		judgeMap[value[1]]++
+	}
+
+	for key, value := range judgeMap {
+		if value == n-1 {
+			result = key
+		}
+	}
+	for _, v := range trust {
+		if v[0] == result {
+			return -1
+		}
+	}
+	fmt.Println(judgeMap)
 	fmt.Println(result)
 	return result
 }
