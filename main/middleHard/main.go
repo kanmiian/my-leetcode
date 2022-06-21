@@ -25,7 +25,9 @@ func main() {
 	piles := []int{312884470}
 	h := 312884469
 	minEatingSpeed(piles, h)
+
 }
+
 
 func maxArea(height []int) int {
 
@@ -122,4 +124,16 @@ func getMax(start int, end int) int {
 	} else {
 		return end
 	}
+}
+
+/**
+插入元素到数组内
+ */
+func insertArr (a []int, index int, value int) []int {
+	if len(a) == index { // nil or empty slice or after last element
+		return append(a, value)
+	}
+	a = append(a[:index+1], a[index:]...) // index < len(a)
+	a[index] = value
+	return a
 }

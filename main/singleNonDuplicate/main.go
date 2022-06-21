@@ -99,7 +99,49 @@ func main() {
 	// 1051. 高度检查器
 	//heights := []int{1, 1, 4, 2, 1, 3}
 	//heightChecker(heights)
+
 }
+
+
+
+
+func duplicateZeros(arr []int) {
+	//length := len(arr)
+	// 得到的res是最后的长度
+	//res := 0
+	//for i := 0; i < length; i++ {
+	//	if arr[i] != 2 {
+	//		arr[res] = arr[i]
+	//		res++
+	//	}
+	//}
+	//top, i := 0, -1
+	//for top < len {
+	//	i ++
+	//	if arr[i] != 0 {
+	//		top++
+	//	} else {
+	//		top += 2
+	//	}
+	//}
+	//j := len -1
+	//if top == len +1 {
+	//	arr[j] = 0
+	//	j --
+	//	i --
+	//}
+	//for j >= 0 {
+	//	arr[j] = arr[i]
+	//	j--
+	//	if arr[i] == 0 {
+	//		arr[j] = arr[i]
+	//		j--
+	//	}
+	//	i--
+	//}
+	fmt.Println(arr)
+}
+
 func heightChecker(heights []int) int {
 
 	sortHeight := make([]int, len(heights))
@@ -587,3 +629,14 @@ func findJudge(n int, trust [][]int) int {
 	fmt.Println(result)
 	return result
 }
+
+func insertArr(a []int, index int, value int) []int {
+	if len(a) == index { // nil or empty slice or after last element
+		return append(a, value)
+	}
+	a = append(a[:index+1], a[index:]...) // index < len(a)
+	a[index] = value
+	return a
+}
+
+
