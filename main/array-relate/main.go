@@ -1,6 +1,9 @@
 package main
 
-import "fmt"
+import (
+	"fmt"
+	"strings"
+)
 
 func main() {
 	// 704 二分查找
@@ -19,10 +22,17 @@ func main() {
 	//testArr()
 
 	// 34 获取数字出现的最开始与末尾位置
-	nums := []int{5, 7, 7, 8,  10}
-	target := 8
-	searchRange(nums, target)
+	//nums := []int{5, 7, 7, 8,  10}
+	//target := 8
+	//searchRange(nums, target)
 
+	//operations := []string {"X++","++X","--X","X--"}
+	//fmt.Println(finalValueAfterOperations(operations))
+
+	//nums := []int{3, 2, 2, 3}
+	//val := 3
+	//fmt.Println(removeElement(nums, val))
+	//twoOutOfThree();
 }
 
 // x的平方根
@@ -30,20 +40,16 @@ func mySqrt(x int) int {
 	return 1
 }
 
-
 //  4. 寻找两个正序数组的中位数
 func findMedianSortedArrays(nums1 []int, nums2 []int) float64 {
 	// 整个为一个数组后排序取中间的一位
 
 	//
-	middle1 := nums1
-
-
+	//middle1 := nums1
 
 	fmt.Println(float64(1), "result")
 	return float64(1)
 }
-
 
 //
 func searchRange(nums []int, target int) []int {
@@ -82,8 +88,8 @@ func getRightBorder(nums []int, target int) int {
 }
 
 func getLeftBorder(nums []int, target int) int {
-	len := len(nums)
-	left, right := 0, len-1
+	//len := len(nums)
+	//left, right := 0, len-1
 	border := -1
 
 	return border
@@ -110,6 +116,7 @@ func search(nums []int, target int) int {
 	}
 
 	fmt.Println(result)
+
 	return result
 }
 
@@ -187,3 +194,80 @@ func testArr() {
 	}
 	fmt.Println(result)
 }
+
+/**
+2011. 执行操作后的变量值
+*/
+func finalValueAfterOperations(operations []string) int {
+	ans := 0
+	for _, v := range operations {
+		if strings.Contains(v, "+") {
+			ans++
+		}
+		if strings.Contains(v, "-") {
+			ans--
+		}
+	}
+
+	return ans
+}
+
+func removeElement(nums []int, val int) int {
+	size := len(nums)
+
+
+	//for i := 0; i < size; i++ {
+	//	if nums[i] == val {
+	//		for j := i + 1; j < size; j++ {
+	//			nums[j-1] = nums[j]
+	//		}
+	//		i--
+	//		size--
+	//	}
+	//}
+
+
+
+
+
+	return size
+}
+
+/**
+	2032. 至少在两个数组中出现的值
+ */
+func twoOutOfThree(nums1 []int, nums2 []int, nums3 []int) []int {
+	get := func(nums []int) (s [101]int) {
+		for _, v := range nums {
+			s[v] = 1
+		}
+		return
+	}
+	var ans []int
+	s1, s2, s3 := get(nums1), get(nums2), get(nums3)
+	for i := 1; i <= 100; i++ {
+		if s1[i]+s2[i]+s3[i] > 1 {
+			ans = append(ans, i)
+		}
+	}
+	return ans
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

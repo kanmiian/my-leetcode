@@ -10,10 +10,12 @@ import (
 */
 func main() {
 
-	a := 1
-	b := 8
-	c := 8
-	fmt.Println(maximumScore(a,b,c))
+	//a := 1
+	//b := 8
+	//c := 8
+	//fmt.Println(maximumScore(a,b,c))
+	str := "OOOO"
+	fmt.Println(minimumMoves(str))
 }
 
 /**
@@ -48,7 +50,17 @@ func countZero(nums [] int)  bool{
 	return count >= 2
 }
 
+func minimumMoves(s string) int {
+	count := 0
 
+	for i := 0; i < len(s); i++ {
+		if s[i] == 'X' {
+			count ++
+			i += 2
+		}
+	}
+	return count
+}
 
 
 

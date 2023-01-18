@@ -3,6 +3,8 @@ package main
 import (
 	"fmt"
 	"sort"
+	"strconv"
+	"strings"
 )
 
 func main() {
@@ -22,12 +24,246 @@ func main() {
 	//isValidSudoku(board)
 
 	// 吃香蕉
-	piles := []int{312884470}
-	h := 312884469
-	minEatingSpeed(piles, h)
+	//piles := []int{312884470}
+	//h := 312884469
+	//minEatingSpeed(piles, h)
+	//s := "1 box has 3 blue 4 red 6 green and 12 yellow marbles"
+	//fmt.Println(areNumbersAscending(s))
 
+	//s := "(name)is(age)yearsold"
+	//knowledge := [][] string {{"name","bob"},{"age","two"}}
+	//fmt.Println(evaluate(s,knowledge))
+	//sentence1 := "CwFfRo regR"
+	//sentence2 := "CwFfRo H regR"
+	//fmt.Println(areSentencesSimilar(sentence1,sentence2))
+	nums := []int {13,10,35,24,76}
+	fmt.Println(countNicePairs(nums))
 }
 
+func countNicePairs(nums []int) int {
+	ans := 0
+	//nums[i]-rev(nums[i])=nums[j]-rev(nums[j])
+	//numMaps := map[int]int{}
+	//for i := 0; i <= len(nums) - 1; i ++ {
+	//	for j := len(nums) - 1; j > 0; j -- {
+	//		if j == i {
+	//			continue
+	//		}
+	//		if nums[i] - reverse(nums[i]) == nums[j] - reverse(nums[j]) {
+	//			fmt.Println(i,"iiii",j,"jjjjjj")
+	//			if v, state := numMaps[min(i,j)]; state {
+	//				if v == max(i,j) {
+	//					continue
+	//				}
+	//			}
+	//			ans ++
+	//			numMaps[min(i,j)] = max(i,j)
+	//			fmt.Println(numMaps,"numsMapppp")
+	//		}
+	//	}
+	//}
+	rev := func(x int) (y int) {
+		for ; x > 0; x /= 10 {
+			y = y*10 + x%10
+		}
+		return
+	}
+	cnt := map[int]int{}
+	const mod int = 1e9 + 7
+	for _, x := range nums {
+		y := x - rev(x)
+		ans = (ans + cnt[y]) % mod
+		cnt[y]++
+	}
+
+	return ans
+}
+
+func reverse(x int, y int) int {
+	for ; x > 0; x /= 10 {
+		y = y*10 + x%10
+	}
+	return y
+}
+
+func areSentencesSimilar(sentence1 string, sentence2 string) bool {
+	strArr1 := strings.Fields(sentence1)
+	strArr2 := strings.Fields(sentence2)
+
+	i, n := 0, len(strArr1)
+	j, m := 0, len(strArr2)
+	for i < n && i < m && strArr1[i] == strArr2[i] {
+		i++
+	}
+	for j < n-i && j < m-i && strArr1[n-j-1] == strArr2[m-j-1] {
+		j++
+	}
+	return i+j == min(n, m)
+}
+
+func min(a, b int) int {
+	if a > b {
+		return b
+	}
+	return a
+}
+
+func max(a, b int) int {
+	if a < b {
+		return b
+	}
+	return a
+}
+
+func areSentencesSimilar2(sentence1 string, sentence2 string) bool {
+	strArr1 := strings.Fields(sentence1)
+	strArr2 := strings.Fields(sentence2)
+
+	if len(strArr2) == len(strArr1) {
+		return sentence1 == sentence2
+	}
+
+	var ans []int
+	longArr := strArr1
+	shortArr := strArr2
+	if len(strArr2) > len(strArr1) {
+		longArr = strArr2
+		shortArr =  strArr1
+	}
+	// todo
+	for i,v := range longArr {
+		for i2, _ := range shortArr {
+			if shortArr[i2] == v {
+				ans = append(ans, i)
+			}
+		}
+	}
+	if len(ans) < 1 {
+		fmt.Println(ans,"ans")
+		return false
+	}
+	if len(ans) != len(shortArr) {
+		fmt.Println(ans,"长度不相等")
+		return  false
+	}
+
+	return judgeNumsContinue(ans, len(longArr) - 1)
+}
+
+func judgeNumsContinue(nums []int, max int) bool{
+	if len(nums) == 1 {
+		fmt.Println(nums,max,"长度等于1",nums[0] == 0 || nums[0] == max)
+		return nums[0] == 0 || nums[0] == max
+	}
+
+	if nums[0] == 0 {
+		for i := 1; i < max; i++ {
+			if nums[i] - 1 != nums[i - 1] {
+				fmt.Println(nums,"包含了首部",max)
+				return false
+			}
+		}
+	}
+
+	if nums[len(nums) - 1] == max - 1 {
+		for i := max; i > 0; i-- {
+			if nums[i] - 1 != nums[i - 1] {
+				fmt.Println(nums,"包含了尾部",max)
+				return false
+			}
+		}
+	}
+
+	// 只有中间 肯定是错的  刚好是收尾两个直接返回true
+
+	return true
+}
+
+/**
+
+ */
+func evaluate(s string, knowledge [][]string) string {
+	undefineVal := "?"
+	stringMap := map[string]string{}
+	ans := strings.Builder{}
+	start := -1
+	for _,arr := range knowledge {
+		stringMap[arr[0]] = arr[1]
+	}
+	for i,c := range s{
+		if c == '(' {
+			start = i
+		} else if c == ')' {
+			if t,state := stringMap[s[start + 1: i]]; state {
+				ans.WriteString(t)
+			} else {
+				ans.WriteString(undefineVal)
+			}
+			start = -1
+		} else if start < 0 {
+			ans.WriteString(string(c))
+		}
+	}
+
+	return ans.String()
+}
+
+
+/**
+	1803. 统计异或值在范围内的数对有多少
+ */
+func countPairs(nums []int, low int, high int) int {
+	ans := 0
+	sort.Ints(nums)
+	i, j := 0, 0
+	for i = 0; i < len(nums); i ++ {
+		for j = i +1;j<len(nums);j++ {
+			xor := nums[i]^nums[j]
+			if xor >= low && xor <= high {
+				ans ++
+			}
+		}
+	}
+	return ans
+
+	//n := len(nums)
+	//res := 0
+	//sort.Ints(nums)
+	//for i := 0; i < n-1; i++ {
+	//	a := nums[i]
+	//	for j := i + 1; j < n; j++ {
+	//		xor := a ^ nums[j]
+	//		if xor >= low && xor <= high {
+	//			res++
+	//		}
+	//	}
+	//}
+	//return res
+}
+
+/**
+	2042. 检查句子中的数字是否递增
+ */
+func areNumbersAscending(s string) bool {
+	strArray := strings.Fields(s)
+	pre := 0
+	for _,v := range strArray {
+		if isNum(v) {
+			fmt.Println(v)
+			nextNum, _ := strconv.Atoi(v)
+			if nextNum <= pre {
+				return  false
+			}
+			pre, _ = strconv.Atoi(v)
+		}
+	}
+	return true
+}
+
+func isNum(s string) bool {
+	_, err := strconv.ParseFloat(s, 64)
+	return err == nil
+}
 
 func maxArea(height []int) int {
 
