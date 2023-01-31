@@ -2,43 +2,41 @@ package main
 
 import (
 	"fmt"
+	"my-leetcode/main/common"
 	"sort"
 	"strconv"
 	"strings"
 )
+type ListNode struct {
+	Val  int
+	Next *ListNode
+}
 
 func main() {
-
-	// 11. 盛最多水的容器
-	//height := []int{1, 8, 6, 2, 5, 4, 8, 3, 7}
-	//maxArea(height)
-
-	// 有效的数独
-	//board := [][]btye
-	//board := [][]byte{{'5', '3', '.', '.', '7', '.', '.', '.', '.'},
-	//	{'6', '.', '.', '1', '9', '5', '.', '.', '.'}, {'.', '9', '8', '.', '.', '.', '.', '6', '.'},
-	//	{'8', '.', '.', '.', '6', '.', '.', '.', '3'}, {'4', '.', '.', '8', '.', '3', '.', '.', '1'},
-	//	{'7', '.', '.', '.', '2', '.', '.', '.', '6'}, {'.', '6', '.', '.', '.', '.', '2', '8', '.'},
-	//	{'.', '.', '.', '4', '1', '9', '.', '.', '5'}, {'.', '.', '.', '.', '8', '.', '.', '7', '9'},
-	//}
-	//isValidSudoku(board)
-
-	// 吃香蕉
-	//piles := []int{312884470}
-	//h := 312884469
-	//minEatingSpeed(piles, h)
-	//s := "1 box has 3 blue 4 red 6 green and 12 yellow marbles"
-	//fmt.Println(areNumbersAscending(s))
-
-	//s := "(name)is(age)yearsold"
-	//knowledge := [][] string {{"name","bob"},{"age","two"}}
-	//fmt.Println(evaluate(s,knowledge))
-	//sentence1 := "CwFfRo regR"
-	//sentence2 := "CwFfRo H regR"
-	//fmt.Println(areSentencesSimilar(sentence1,sentence2))
-	nums := []int {13,10,35,24,76}
-	fmt.Println(countNicePairs(nums))
+	list1 := common.NewLinkedList([]int {1,2,3,4,5,6,7})
+	a := 3
+	b := 4
+	list2 := common.NewLinkedList([]int {1000000,1000001,100000})
+	fmt.Println(mergeInBetween(list1,a,b,list2))
 }
+
+func mergeInBetween(list1 *common.ListNode, a int, b int, list2 *common.ListNode) *common.ListNode {
+	tmpA := list1
+	for i := 0;i < a - 1; i ++ {
+		tmpA = tmpA.Next
+	}
+	tmpB := tmpA
+	for i := 0; i < b - a + 2; i ++ {
+		tmpB = tmpB.Next
+	}
+	tmpA.Next = list2
+	for list2.Next != nil {
+		list2 = list2.Next
+	}
+	list2.Next = tmpB
+	return  list1
+}
+
 
 func countNicePairs(nums []int) int {
 	ans := 0
@@ -98,21 +96,8 @@ func areSentencesSimilar(sentence1 string, sentence2 string) bool {
 	for j < n-i && j < m-i && strArr1[n-j-1] == strArr2[m-j-1] {
 		j++
 	}
-	return i+j == min(n, m)
-}
-
-func min(a, b int) int {
-	if a > b {
-		return b
-	}
-	return a
-}
-
-func max(a, b int) int {
-	if a < b {
-		return b
-	}
-	return a
+	//return i+j == getMid(n, m)
+	return false
 }
 
 func areSentencesSimilar2(sentence1 string, sentence2 string) bool {
@@ -128,10 +113,10 @@ func areSentencesSimilar2(sentence1 string, sentence2 string) bool {
 	shortArr := strArr2
 	if len(strArr2) > len(strArr1) {
 		longArr = strArr2
-		shortArr =  strArr1
+		shortArr = strArr1
 	}
 	// todo
-	for i,v := range longArr {
+	for i, v := range longArr {
 		for i2, _ := range shortArr {
 			if shortArr[i2] == v {
 				ans = append(ans, i)
@@ -139,36 +124,36 @@ func areSentencesSimilar2(sentence1 string, sentence2 string) bool {
 		}
 	}
 	if len(ans) < 1 {
-		fmt.Println(ans,"ans")
+		fmt.Println(ans, "ans")
 		return false
 	}
 	if len(ans) != len(shortArr) {
-		fmt.Println(ans,"长度不相等")
-		return  false
+		fmt.Println(ans, "长度不相等")
+		return false
 	}
 
-	return judgeNumsContinue(ans, len(longArr) - 1)
+	return judgeNumsContinue(ans, len(longArr)-1)
 }
 
-func judgeNumsContinue(nums []int, max int) bool{
+func judgeNumsContinue(nums []int, max int) bool {
 	if len(nums) == 1 {
-		fmt.Println(nums,max,"长度等于1",nums[0] == 0 || nums[0] == max)
+		fmt.Println(nums, max, "长度等于1", nums[0] == 0 || nums[0] == max)
 		return nums[0] == 0 || nums[0] == max
 	}
 
 	if nums[0] == 0 {
 		for i := 1; i < max; i++ {
-			if nums[i] - 1 != nums[i - 1] {
-				fmt.Println(nums,"包含了首部",max)
+			if nums[i]-1 != nums[i-1] {
+				fmt.Println(nums, "包含了首部", max)
 				return false
 			}
 		}
 	}
 
-	if nums[len(nums) - 1] == max - 1 {
+	if nums[len(nums)-1] == max-1 {
 		for i := max; i > 0; i-- {
-			if nums[i] - 1 != nums[i - 1] {
-				fmt.Println(nums,"包含了尾部",max)
+			if nums[i]-1 != nums[i-1] {
+				fmt.Println(nums, "包含了尾部", max)
 				return false
 			}
 		}
@@ -187,14 +172,14 @@ func evaluate(s string, knowledge [][]string) string {
 	stringMap := map[string]string{}
 	ans := strings.Builder{}
 	start := -1
-	for _,arr := range knowledge {
+	for _, arr := range knowledge {
 		stringMap[arr[0]] = arr[1]
 	}
-	for i,c := range s{
+	for i, c := range s {
 		if c == '(' {
 			start = i
 		} else if c == ')' {
-			if t,state := stringMap[s[start + 1: i]]; state {
+			if t, state := stringMap[s[start+1:i]]; state {
 				ans.WriteString(t)
 			} else {
 				ans.WriteString(undefineVal)
@@ -208,19 +193,18 @@ func evaluate(s string, knowledge [][]string) string {
 	return ans.String()
 }
 
-
 /**
-	1803. 统计异或值在范围内的数对有多少
- */
+1803. 统计异或值在范围内的数对有多少
+*/
 func countPairs(nums []int, low int, high int) int {
 	ans := 0
 	sort.Ints(nums)
 	i, j := 0, 0
-	for i = 0; i < len(nums); i ++ {
-		for j = i +1;j<len(nums);j++ {
-			xor := nums[i]^nums[j]
+	for i = 0; i < len(nums); i++ {
+		for j = i + 1; j < len(nums); j++ {
+			xor := nums[i] ^ nums[j]
 			if xor >= low && xor <= high {
-				ans ++
+				ans++
 			}
 		}
 	}
@@ -242,27 +226,22 @@ func countPairs(nums []int, low int, high int) int {
 }
 
 /**
-	2042. 检查句子中的数字是否递增
- */
+2042. 检查句子中的数字是否递增
+*/
 func areNumbersAscending(s string) bool {
 	strArray := strings.Fields(s)
 	pre := 0
-	for _,v := range strArray {
-		if isNum(v) {
+	for _, v := range strArray {
+		if common.IsNum(v) {
 			fmt.Println(v)
 			nextNum, _ := strconv.Atoi(v)
 			if nextNum <= pre {
-				return  false
+				return false
 			}
 			pre, _ = strconv.Atoi(v)
 		}
 	}
 	return true
-}
-
-func isNum(s string) bool {
-	_, err := strconv.ParseFloat(s, 64)
-	return err == nil
 }
 
 func maxArea(height []int) int {
@@ -271,7 +250,7 @@ func maxArea(height []int) int {
 	start := 0
 	end := length - 1
 	total := 0
-	min := getMin(height[start], height[end])
+	min := common.GetMin(height[start], height[end])
 	total = min * (end - start)
 	for {
 		if start == end {
@@ -283,7 +262,7 @@ func maxArea(height []int) int {
 		} else {
 			end--
 		}
-		temp := getMin(height[start], height[end])
+		temp := common.GetMin(height[start], height[end])
 		temoTotal := temp * (end - start)
 		if temoTotal > total {
 			total = temoTotal
@@ -340,32 +319,12 @@ func getMid(piles []int, x int) int {
 	return hours
 }
 
-/**
-获取较小值
-*/
-func getMin(start int, end int) int {
-	if start > end {
-		return end
-	} else {
-		return start
-	}
-}
 
-/**
-获取较大值
-*/
-func getMax(start int, end int) int {
-	if start > end {
-		return start
-	} else {
-		return end
-	}
-}
 
 /**
 插入元素到数组内
- */
-func insertArr (a []int, index int, value int) []int {
+*/
+func insertArr(a []int, index int, value int) []int {
 	if len(a) == index { // nil or empty slice or after last element
 		return append(a, value)
 	}
